@@ -2,7 +2,12 @@ package it.polito.tdp.nyc;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import org.jgrapht.Graph;
+import org.jgrapht.graph.DefaultWeightedEdge;
+
 import it.polito.tdp.nyc.model.Model;
+import it.polito.tdp.nyc.model.NTA;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -15,6 +20,7 @@ import javafx.scene.control.TextField;
 public class FXMLController {
 
 	Model model;
+	Graph<NTA, DefaultWeightedEdge> graph;
 	
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
@@ -41,7 +47,7 @@ public class FXMLController {
     private TableColumn<?, ?> clV2; // Value injected by FXMLLoader
 
     @FXML // fx:id="cmbBorough"
-    private ComboBox<?> cmbBorough; // Value injected by FXMLLoader
+    private ComboBox<String> cmbBorough; // Value injected by FXMLLoader
 
     @FXML // fx:id="tblArchi"
     private TableView<?> tblArchi; // Value injected by FXMLLoader
@@ -63,6 +69,12 @@ public class FXMLController {
     @FXML
     void doCreaGrafo(ActionEvent event) {
     
+    	String borough = this.cmbBorough.getValue();
+    	
+    	this.graph = this.model.creaGrafo(borough);
+    	
+    	txtResult.appendText("#VERTICI: "+this.graph.vertexSet().size());
+    	
     }
 
     @FXML
@@ -90,6 +102,7 @@ public class FXMLController {
     
     public void setModel(Model model) {
     	this.model = model;
+    	this.cmbBorough.getItems().addAll(this.model.getBoroughs());
     }
 
 }
